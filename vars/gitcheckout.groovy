@@ -1,3 +1,3 @@
-def call() {
- checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/sanjana-purbia/app.git']])
+def call(Map,config) {
+ checkout scmGit(branches: [[name: 'config.branch']], extensions: [], userRemoteConfigs: [[credentialsId: 'config.id', url: config.url]])
 }
