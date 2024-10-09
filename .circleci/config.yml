@@ -1,0 +1,29 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/node:18
+    steps:
+      - checkout
+      - run:
+        name: install npm dependencies
+        command:
+          npm install --save
+  build_docker_image:
+    docker:
+      - image: circleci/node:18
+    steps:
+      - checkout
+      - run:
+        name: Build docker image
+        command: |
+        docker build -t sanjanapurbia/app:latest .
+        echo $Docker_password | docker login -u sanjanapurbia --password stdin
+        docker push sanjanapurbia/app:latest
+
+
+workflows:
+  build:
+    jobs:
+      - build
+      - build_docker_image
