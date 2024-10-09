@@ -17,7 +17,7 @@ jobs:
       - run:
         name: Build docker image
         command: |
-        docker build -t sanjanapurbia/app:latest .
+        docker build -t app -t sanjanapurbia/app:latest .
         echo $Docker_password | docker login -u sanjanapurbia --password stdin
         docker push sanjanapurbia/app:latest
 
