@@ -2,39 +2,35 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:18
     steps:
       - checkout
       - run:
-          name: install npm dependencies
-          command:
-            npm install --save
+          name: Install npm dependencies
+          command: npm install --save
+
   build_docker_image:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:18
     steps:
-      - checkout  # Check out your source code
-
-      - setup_remote_docker:
+      - checkout
+      - setup_remote_docker:  # Add this step to enable Docker commands
           version: 20.10.7  # Specify the Docker version
-          docker_layer_caching: true  # Enable layer caching for faster builds
-
+          docker_layer_caching: true  # Optional for faster builds
       - run:
           name: Build Docker Image
           command: |
-            docker build -t app -t sanjanapurbia/app:latest .
-
+            docker build -t sanjanapurbia/app:latest .
       - run:
           name: Log in to Docker Hub
           command: echo $DOCKER_PASSWORD | docker login -u sanjanapurbia --password-stdin
-
       - run:
           name: Push Docker Image
           command: |
             docker push sanjanapurbia/app:latest
 
 workflows:
-  version: 2
-  build_and_push:
+  build:
     jobs:
       - build
+      - build_docker_image
