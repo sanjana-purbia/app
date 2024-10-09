@@ -13,17 +13,28 @@ jobs:
     docker:
       - image: circleci/node:12
     steps:
-      - checkout
+      - checkout  # Check out your source code
+
+      - setup_remote_docker:
+          version: 20.10.7  # Specify the Docker version
+          docker_layer_caching: true  # Enable layer caching for faster builds
+
       - run:
-          name: Build docker image
+          name: Build Docker Image
           command: |
             docker build -t app -t sanjanapurbia/app:latest .
-            echo $Docker_password | docker login -u sanjanapurbia --password stdin
+
+      - run:
+          name: Log in to Docker Hub
+          command: echo $DOCKER_PASSWORD | docker login -u sanjanapurbia --password-stdin
+
+      - run:
+          name: Push Docker Image
+          command: |
             docker push sanjanapurbia/app:latest
 
-
 workflows:
-  build:
+  version: 2
+  build_and_push:
     jobs:
       - build
-      - build_docker_image
