@@ -15,8 +15,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:  # Add this step to enable Docker commands
-          version: 20.10.7  # Specify the Docker version
-          docker_layer_caching: true  # Optional for faster builds
+          docker_layer_caching: false  # Optional for faster builds
       - run:
           name: Build Docker Image
           command: |
